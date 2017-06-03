@@ -10,7 +10,7 @@
     <div class="clock">
       <div class="clock-face">
         <div class="hand hour-hand"></div>
-        <div class="hand min-hand"></div>
+        <div class="hand minute-hand"></div>
         <div class="hand second-hand"></div>
       </div>
     </div>
@@ -18,7 +18,7 @@
 
   <style>
     html {
-      background:#018DED url(http://unsplash.it/1500/1000?image=881&blur=50);
+      background:#018DED;
       background-size:cover;
       font-family:'helvetica neue';
       text-align: center;
@@ -64,12 +64,33 @@
       top:50%;
       transform-origin: 100%;
       transform: rotate(90deg);
+      transition: all 0.1s;
+      transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
   </style>
 
   <script>
+    const secondHand = document.querySelector('.second-hand');
+    const minuteHand = document.querySelector('.minute-hand');
+    const hourHand = document.querySelector('.hour-hand');
 
+    function setRotation(node, time, divisor) {
+      degrees = ( time * 360 / divisor ) + 90;
+      node.style.transform = `rotate(${degrees}deg)`;
+    }
+    
+    function setDate () {
+      const now = new Date();
+      const seconds = now.getSeconds();
+      const minutes = now.getMinutes();
+      const hours = now.getHours();
+      setRotation(secondHand, seconds, 60);
+      setRotation(minuteHand, minutes, 60);
+      setRotation(hourHand, hours, 12);
+    }
+
+    setInterval(setDate, 1000);
 
   </script>
 </body>
