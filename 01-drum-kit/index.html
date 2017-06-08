@@ -74,7 +74,12 @@
     e.target.classList.remove('playing');
   }
 
+  function clickPlay() {
+    playSound({keyCode: this.dataset.key});
+  }
+
   keys.forEach(key => key.addEventListener('transitionend', removeTransition));
+  keys.forEach(key => key.addEventListener('click', clickPlay));
   window.addEventListener('keydown', playSound);
 
 </script>
