@@ -99,6 +99,29 @@
   </div>
 
 <script>
+  const checkBoxes = document.querySelectorAll('.inbox input[type="checkbox"]');
+  let shiftDown = false;
+  let firstClicked = null;
+
+  function clickListener (e) {
+    let contained = false;
+    if (e.shiftKey && this.checked) {
+      contained = false;
+      checkBoxes.forEach(box => {
+        if (box === this || box === firstClicked) {
+          contained = !contained;
+        }
+        if (contained) {
+          box.checked = firstClicked.checked;
+        }
+      });
+      contained = false;
+    }
+    firstClicked = this;
+  }
+
+  checkBoxes.forEach(box => box.addEventListener('click', clickListener));
+
 </script>
 </body>
 </html>
