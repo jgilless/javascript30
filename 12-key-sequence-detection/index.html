@@ -7,6 +7,17 @@
 </head>
 <body>
 <script>
+  const entered = [];
+  const code = 'joshua';
+  window.addEventListener('keyup', (e) => {
+    entered.push(e.key);
+    entered.splice(-code.length -1, entered.length - code.length);
+    if (entered.join('').includes(code)) {
+      window.setInterval(function () {
+        cornify_add();
+      }, 1000);
+    }
+  });
 </script>
 </body>
 </html>
