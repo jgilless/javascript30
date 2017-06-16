@@ -23,12 +23,78 @@
       <input type="text" name="item" placeholder="Item Name" required>
       <input type="submit" value="+ Add Item">
     </form>
+    <button id="check-all" class="check-button">Check All</button>
+    <button id="clear-all" class="check-button">Clear</button>
   </div>
 
 <script>
   const addItems = document.querySelector('.add-items');
   const itemsList = document.querySelector('.plates');
-  const items = [];
+  const items = JSON.parse(localStorage.getItem('items')) || [];
+
+  function toggleDone(e) {
+    if (!e.target.matches('input')) {
+      return;
+    }
+    const el = e.target;
+    const index = el.dataset.id;
+
+    items[index].done = !items[index].done;
+    localStorage.setItem('items', JSON.stringify(items));
+  }
+
+  function populateList(items = [], itemsList) {
+    itemsList.innerHTML = items.map((item, i) => {
+      return `<li>
+        <input type="checkbox" data-id="${i}" id="item-${i}" ${item.done ? 'checked' : ''}/>
+        <label for="item-${i}">
+          ${item.text}
+        </label>
+      </li>`;
+    }).join('');
+  }
+
+  function addItem(e) {
+    e.preventDefault();
+    const text = (this.querySelector('[name="item"]')).value;
+    const item = {
+      text: text,
+      done: false
+    }
+    
+    items.push(item);
+    populateList(items, itemsList);
+
+    localStorage.setItem('items', JSON.stringify(items));
+    this.reset();
+  }
+
+  let lastCheckedAll = true;
+  function checkAll() {
+    items.map((item) => {
+      item.done = lastCheckedAll;
+    });
+    lastCheckedAll = !lastCheckedAll;
+    localStorage.setItem('items', JSON.stringify(items));
+    populateList(items, itemsList);
+  }
+
+  function clearAll() {
+    items.length = 0;
+    localStorage.setItem('items', JSON.stringify(items));
+    populateList(items, itemsList);
+  }
+
+  addItems.addEventListener('submit', addItem);
+  populateList(items, itemsList);
+
+  itemsList.addEventListener('click', toggleDone);
+
+  const checkAllButton = document.querySelector('#check-all');
+  checkAllButton.addEventListener('click', checkAll)
+
+  const clearButton = document.querySelector('#clear-all');
+  clearButton.addEventListener('click', clearAll);
 
 </script>
 
